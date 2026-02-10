@@ -14,6 +14,7 @@
             --link-color: #00376b;
             --max-width: 935px;
             --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --loader-speed: 0.8s;
         }
 
         * {
@@ -27,9 +28,47 @@
             background-color: var(--bg-color);
             color: var(--text-primary);
             line-height: 1.5;
+            overflow-x: hidden;
         }
 
-        /* Navigation Placeholder - Visual shim for layout */
+        /* Loading Screen Styles */
+        #loader-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #a8a8a8; /* Muted grey to match IG aesthetic */
+            border-radius: 50%;
+            animation: spin var(--loader-speed) linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Content initially hidden */
+        #app-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.6s ease-in;
+        }
+
+        /* Navigation */
         nav {
             height: 60px;
             background: white;
@@ -240,88 +279,126 @@
 </head>
 <body>
 
-    <nav>
-        <div class="nav-content">
-            Instagram
-        </div>
-    </nav>
-
-    <div class="container">
-        <!-- Profile Section -->
-        <header class="profile-header">
-            <div class="profile-image-container">
-                <img src="pfp.webp" alt="Profile Picture" class="profile-image">
-            </div>
-
-            <section class="profile-info">
-                <div class="profile-user-settings">
-                    <h1 class="username">Aruna.otherworld</h1>
-                    <button class="edit-button">Edit Profile</button>
-                </div>
-
-                <ul class="profile-stats">
-                    <li><span>12</span> posts</li>
-                    <li><span>1.2k</span> followers</li>
-                    <li><span>450</span> following</li>
-                </ul>
-
-                <div class="profile-bio">
-                    <span class="profile-real-name">Aruna</span>
-                    <span class="profile-category">Music & Art</span>
-                    <p>A violinist living the dream!</p>
-                </div>
-            </section>
-        </header>
-
-        <!-- Gallery Section -->
-        <main class="posts-grid">
-            <!-- Post 1 -->
-            <div class="post-item">
-                <img src="post 1.webp" alt="Post 1">
-                <div class="post-overlay">❤️ 124  💬 12</div>
-            </div>
-            <!-- Post 2 -->
-            <div class="post-item">
-                <img src="post 2.webp" alt="Post 2">
-                <div class="post-overlay">❤️ 89  💬 5</div>
-            </div>
-            <!-- Post 3 -->
-            <div class="post-item">
-                <img src="post 3.webp" alt="Post 3">
-                <div class="post-overlay">❤️ 210  💬 18</div>
-            </div>
-            <!-- Post 4 -->
-            <div class="post-item">
-                <img src="post 4.webp" alt="Post 4">
-                <div class="post-overlay">❤️ 150  💬 9</div>
-            </div>
-            <!-- Post 5 -->
-            <div class="post-item">
-                <img src="post 5.webp" alt="Post 5">
-                <div class="post-overlay">❤️ 302  💬 45</div>
-            </div>
-            <!-- Post 6 -->
-            <div class="post-item">
-                <img src="post 6.webp" alt="Post 6">
-                <div class="post-overlay">❤️ 95  💬 2</div>
-            </div>
-            <!-- Post 7 -->
-            <div class="post-item">
-                <img src="post 7.webp" alt="Post 7">
-                <div class="post-overlay">❤️ 412  💬 22</div>
-            </div>
-            <!-- Post 8 -->
-            <div class="post-item">
-                <img src="post 8.webp" alt="Post 8">
-                <div class="post-overlay">❤️ 118  💬 7</div>
-            </div>
-            <!-- Post 9 -->
-            <div class="post-item">
-                <img src="post 9.webp" alt="Post 9">
-                <div class="post-overlay">❤️ 256  💬 14</div>
-            </div>
-        </main>
+    <!-- Loading Overlay -->
+    <div id="loader-wrapper">
+        <div class="spinner"></div>
     </div>
 
+    <!-- Main Content Container (Initially Hidden) -->
+    <div id="app-content">
+        <nav>
+            <div class="nav-content">
+                Instagram
+            </div>
+        </nav>
+
+        <div class="container">
+            <!-- Profile Section -->
+            <header class="profile-header">
+                <div class="profile-image-container">
+                    <img src="pfp.webp" alt="Profile Picture" class="profile-image">
+                </div>
+
+                <section class="profile-info">
+                    <div class="profile-user-settings">
+                        <h1 class="username">Aruna.otherworld</h1>
+                        <button class="edit-button">Edit Profile</button>
+                    </div>
+
+                    <ul class="profile-stats">
+                        <li><span>12</span> posts</li>
+                        <li><span>1.2k</span> followers</li>
+                        <li><span>450</span> following</li>
+                    </ul>
+
+                    <div class="profile-bio">
+                        <span class="profile-real-name">Aruna</span>
+                        <span class="profile-category">Music & Art</span>
+                        <p>A violinist living the dream!</p>
+                    </div>
+                </section>
+            </header>
+
+            <!-- Gallery Section -->
+            <main class="posts-grid">
+                <!-- Post 1 -->
+                <div class="post-item">
+                    <img src="post 1.webp" alt="Post 1">
+                    <div class="post-overlay">❤️ 124  💬 12</div>
+                </div>
+                <!-- Post 2 -->
+                <div class="post-item">
+                    <img src="post 2.webp" alt="Post 2">
+                    <div class="post-overlay">❤️ 89  💬 5</div>
+                </div>
+                <!-- Post 3 -->
+                <div class="post-item">
+                    <img src="post 3.webp" alt="Post 3">
+                    <div class="post-overlay">❤️ 210  💬 18</div>
+                </div>
+                <!-- Post 4 -->
+                <div class="post-item">
+                    <img src="post 4.webp" alt="Post 4">
+                    <div class="post-overlay">❤️ 150  💬 9</div>
+                </div>
+                <!-- Post 5 -->
+                <div class="post-item">
+                    <img src="post 5.webp" alt="Post 5">
+                    <div class="post-overlay">❤️ 302  💬 45</div>
+                </div>
+                <!-- Post 6 -->
+                <div class="post-item">
+                    <img src="post 6.webp" alt="Post 6">
+                    <div class="post-overlay">❤️ 95  💬 2</div>
+                </div>
+                <!-- Post 7 -->
+                <div class="post-item">
+                    <img src="post 7.webp" alt="Post 7">
+                    <div class="post-overlay">❤️ 412  💬 22</div>
+                </div>
+                <!-- Post 8 -->
+                <div class="post-item">
+                    <img src="post 8.webp" alt="Post 8">
+                    <div class="post-overlay">❤️ 118  💬 7</div>
+                </div>
+                <!-- Post 9 -->
+                <div class="post-item">
+                    <img src="post 9.webp" alt="Post 9">
+                    <div class="post-overlay">❤️ 256  💬 14</div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * Initialization Logic
+         * Handles the fake loading delay and content transition.
+         */
+        document.addEventListener('DOMContentLoaded', () => {
+            const FAKE_LOADING_DURATION = 5000; // 5 seconds
+            const loader = document.getElementById('loader-wrapper');
+            const content = document.getElementById('app-content');
+
+            setTimeout(() => {
+                // 1. Reveal content container in layout
+                content.style.display = 'block';
+                
+                // 2. Trigger fade out of loader
+                loader.style.opacity = '0';
+                loader.style.visibility = 'hidden';
+
+                // 3. Trigger fade in of content (slight delay for smoother visuals)
+                setTimeout(() => {
+                    content.style.opacity = '1';
+                }, 50);
+
+                // 4. Cleanup DOM after transition finishes
+                setTimeout(() => {
+                    loader.remove();
+                }, 500);
+            }, FAKE_LOADING_DURATION);
+        });
+    </script>
 </body>
 </html>
