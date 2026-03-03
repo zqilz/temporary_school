@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile • Instagram Clone</title>
+    <title>Profile • Aruna.otherworld</title>
     <style>
-        /* CSS Variables for design consistency */
         :root {
             --bg-color: #fafafa;
             --border-color: #dbdbdb;
@@ -31,7 +30,7 @@
             overflow-x: hidden;
         }
 
-        /* Loading Screen Styles */
+        /* Loading Screen */
         #loader-wrapper {
             position: fixed;
             top: 0;
@@ -40,7 +39,6 @@
             height: 100vh;
             background-color: #ffffff;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 9999;
@@ -51,7 +49,7 @@
             width: 40px;
             height: 40px;
             border: 3px solid #f3f3f3;
-            border-top: 3px solid #a8a8a8; /* Muted grey to match IG aesthetic */
+            border-top: 3px solid #a8a8a8;
             border-radius: 50%;
             animation: spin var(--loader-speed) linear infinite;
         }
@@ -61,7 +59,6 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Content initially hidden */
         #app-content {
             display: none;
             opacity: 0;
@@ -87,6 +84,7 @@
             padding: 0 20px;
             font-weight: 600;
             font-size: 1.2rem;
+            cursor: pointer;
         }
 
         /* Container */
@@ -149,7 +147,6 @@
             display: flex;
             list-style: none;
             margin-bottom: 20px;
-            font-size: 16px;
         }
 
         .profile-stats li {
@@ -199,7 +196,6 @@
             transition: filter 0.2s ease-in-out;
         }
 
-        /* Overlay effect on hover */
         .post-overlay {
             position: absolute;
             top: 0;
@@ -220,186 +216,272 @@
             opacity: 1;
         }
 
-        .post-item:hover img {
-            filter: brightness(0.8);
+        /* Post Viewer Modal */
+        #post-viewer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            z-index: 1000;
+            display: none;
+            overflow-y: auto;
         }
 
-        /* Responsive adjustments */
+        .viewer-header {
+            height: 60px;
+            background: white;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 1001;
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            margin-right: 20px;
+        }
+
+        .viewer-feed {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+
+        .feed-post {
+            background: white;
+            border: 1px solid var(--border-color);
+            margin-bottom: 30px;
+            border-radius: 3px;
+        }
+
+        .feed-post-header {
+            display: flex;
+            align-items: center;
+            padding: 14px;
+        }
+
+        .feed-post-header img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 12px;
+            object-fit: cover;
+        }
+
+        .feed-post-header span {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .feed-post-img {
+            width: 100%;
+            display: block;
+        }
+
+        .feed-post-content {
+            padding: 12px 16px;
+        }
+
+        .feed-actions {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 8px;
+            font-size: 20px;
+        }
+
+        .feed-likes {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .feed-caption {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .feed-caption strong {
+            margin-right: 6px;
+        }
+
+        .feed-date {
+            color: var(--text-secondary);
+            font-size: 10px;
+            text-transform: uppercase;
+            margin-top: 8px;
+            display: block;
+        }
+
+        /* Responsive */
         @media screen and (max-width: 735px) {
-            .container {
-                margin: 0;
-                padding: 0;
-            }
-
-            header.profile-header {
-                padding: 16px;
-                margin-bottom: 0;
-            }
-
-            .profile-image {
-                width: 77px;
-                height: 77px;
-            }
-
-            .profile-image-container {
-                margin-right: 0;
-            }
-
-            .username {
-                font-size: 20px;
-            }
-
-            .posts-grid {
-                gap: 3px;
-                padding-top: 0;
-            }
-
+            .container { margin: 0; padding: 0; }
+            header.profile-header { padding: 16px; margin-bottom: 0; }
+            .profile-image { width: 77px; height: 77px; }
+            .profile-image-container { margin-right: 0; }
+            .username { font-size: 20px; }
+            .posts-grid { gap: 3px; padding-top: 0; }
             .profile-stats {
                 display: flex;
                 justify-content: space-around;
                 border-top: 1px solid var(--border-color);
                 padding: 12px 0;
-                margin-bottom: 0;
             }
-
             .profile-stats li {
                 margin-right: 0;
                 text-align: center;
                 font-size: 14px;
                 display: flex;
                 flex-direction: column;
-                color: var(--text-secondary);
             }
-
-            .profile-stats span {
-                color: var(--text-primary);
-            }
+            .viewer-feed { width: 100%; }
+            .feed-post { border-left: none; border-right: none; border-radius: 0; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Loading Overlay -->
     <div id="loader-wrapper">
         <div class="spinner"></div>
     </div>
 
-    <!-- Main Content Container (Initially Hidden) -->
     <div id="app-content">
         <nav>
-            <div class="nav-content">
+            <div class="nav-content" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
                 Instagram
             </div>
         </nav>
 
         <div class="container">
-            <!-- Profile Section -->
             <header class="profile-header">
                 <div class="profile-image-container">
-                    <img src="pfp.webp" alt="Profile Picture" class="profile-image">
+                    <img src="post 2e.webp" alt="Profile Picture" class="profile-image">
                 </div>
 
                 <section class="profile-info">
                     <div class="profile-user-settings">
                         <h1 class="username">Aruna.otherworld</h1>
-                        <button class="edit-button">Edit Profile</button>
+                        <button class="edit-button">Edit Profil</button>
                     </div>
 
                     <ul class="profile-stats">
-                        <li><span>12</span> posts</li>
-                        <li><span>1.2k</span> followers</li>
-                        <li><span>450</span> following</li>
+                        <li><span>9</span> kiriman</li>
+                        <li><span>1.2k</span> pengikut</li>
+                        <li><span>450</span> diikuti</li>
                     </ul>
 
                     <div class="profile-bio">
                         <span class="profile-real-name">Aruna</span>
-                        <span class="profile-category">Music & Art</span>
-                        <p>A violinist living the dream!</p>
+                        <span class="profile-category">Musik & Seni</span>
+                        <p>Hidup dalam melodi 🎻 | Grateful daughter ✨</p>
                     </div>
                 </section>
             </header>
 
-            <!-- Gallery Section -->
-            <main class="posts-grid">
-                <!-- Post 1 -->
-                <div class="post-item">
-                    <img src="post 1.webp" alt="Post 1">
-                    <div class="post-overlay">❤️ 124  💬 12</div>
-                </div>
-                <!-- Post 2 -->
-                <div class="post-item">
-                    <img src="post 2e.webp" alt="Post 2">
-                    <div class="post-overlay">❤️ 89  💬 5</div>
-                </div>
-                <!-- Post 3 -->
-                <div class="post-item">
-                    <img src="post 3e.webp" alt="Post 3">
-                    <div class="post-overlay">❤️ 210  💬 18</div>
-                </div>
-                <!-- Post 4 -->
-                <div class="post-item">
-                    <img src="post 4.webp" alt="Post 4">
-                    <div class="post-overlay">❤️ 150  💬 9</div>
-                </div>
-                <!-- Post 5 -->
-                <div class="post-item">
-                    <img src="post 5e.webp" alt="Post 5">
-                    <div class="post-overlay">❤️ 302  💬 45</div>
-                </div>
-                <!-- Post 6 -->
-                <div class="post-item">
-                    <img src="post 6.webp" alt="Post 6">
-                    <div class="post-overlay">❤️ 95  💬 2</div>
-                </div>
-                <!-- Post 7 -->
-                <div class="post-item">
-                    <img src="post 7.webp" alt="Post 7">
-                    <div class="post-overlay">❤️ 412  💬 22</div>
-                </div>
-                <!-- Post 8 -->
-                <div class="post-item">
-                    <img src="post 8e.webp" alt="Post 8">
-                    <div class="post-overlay">❤️ 118  💬 7</div>
-                </div>
-                <!-- Post 9 -->
-                <div class="post-item">
-                    <img src="post9e.webp" alt="Post 9">
-                    <div class="post-overlay">❤️ 256  💬 14</div>
-                </div>
-            </main>
+            <main class="posts-grid" id="main-grid"></main>
         </div>
     </div>
 
-    <script>
-        /**
-         * Initialization Logic
-         * Handles the fake loading delay and content transition.
-         */
-        document.addEventListener('DOMContentLoaded', () => {
-            const FAKE_LOADING_DURATION = 5000; // 5 seconds
-            const loader = document.getElementById('loader-wrapper');
-            const content = document.getElementById('app-content');
+    <div id="post-viewer">
+        <div class="viewer-header">
+            <button class="back-button" id="close-viewer">←</button>
+            <span style="font-weight: 600;">Kiriman</span>
+        </div>
+        <div class="viewer-feed" id="viewer-feed"></div>
+    </div>
 
+    <script>
+        const postsData = [
+            { id: 1, img: 'post 1.webp', likes: 145, comments: 8, caption: 'Ketawa bareng Papa itu mood booster paling ampuh! Makasih ya Pa udah selalu bikin Aruna ceria di setiap situasi. Love you! ❤️😂', date: '1 hari yang lalu' },
+            { id: 2, img: 'post 2e.webp', likes: 230, comments: 15, caption: 'Sesi latihan sore ini. Fokus, disiplin, dan cinta. Musik adalah bagian dari jiwaku. 🎻✨ #violinist #practice', date: '3 hari yang lalu' },
+            { id: 3, img: 'post 3e.webp', likes: 189, comments: 12, caption: 'Selfie bareng Mama tersayang di sela-sela persiapan. Beliau adalah pendukung nomer satu yang nggak pernah lelah kasih semangat! 🥰📸', date: '5 hari yang lalu' },
+            { id: 4, img: 'post 4.webp', likes: 167, comments: 10, caption: 'Support system yang luar biasa. Bersyukur banget punya Papa yang selalu ada di setiap langkah perjalanan musikku. Papa hebat! 👔🎻', date: '1 minggu yang lalu' },
+            { id: 5, img: 'post 5e.webp', likes: 412, comments: 34, caption: 'Alhamdulillah! Kerja keras latihan setiap malam akhirnya membuahkan hasil. Trofi ini Aruna persembahkan untuk Papa dan Mama. 🏆✨', date: '1 minggu yang lalu' },
+            { id: 6, img: 'post 6.webp', likes: 320, comments: 21, caption: 'Kemenangan ini terasa lebih manis karena ada Mama di sampingku. Terima kasih doanya yang nggak pernah putus ya, Ma! ❤️ piala ini buat kita!', date: '2 minggu yang lalu' },
+            { id: 7, img: 'post 7.webp', likes: 215, comments: 11, caption: 'Bangga bisa membawa pulang penghargaan untuk sekolah. Perjalanan masih panjang, semangat terus Aruna! 💪🎻 #achievement #schoollife', date: '3 minggu yang lalu' },
+            { id: 8, img: 'post 8e.webp', likes: 502, comments: 45, caption: 'Silver Medal! 🥈 Seneng banget bisa bikin Papa bangga hari ini. Terima kasih dukungannya yang luar biasa sampai Aruna bisa di titik ini. Grateful! ✨', date: '1 bulan yang lalu' },
+            { id: 9, img: 'post9e.webp', likes: 280, comments: 18, caption: 'Waktunya pertunjukan! Gugup tapi sangat antusias. Semoga melodiku bisa sampai ke hati kalian semua. Mari kita bermusik! 🎻🎶', date: '1 bulan yang lalu' }
+        ];
+
+        const gridContainer = document.getElementById('main-grid');
+        const viewerFeed = document.getElementById('viewer-feed');
+        const postViewer = document.getElementById('post-viewer');
+        const closeViewerBtn = document.getElementById('close-viewer');
+
+        function initGrid() {
+            postsData.forEach(post => {
+                const postDiv = document.createElement('div');
+                postDiv.className = 'post-item';
+                postDiv.innerHTML = `
+                    <img src="${post.img}" alt="Post ${post.id}">
+                    <div class="post-overlay">❤️ ${post.likes} &nbsp; 💬 ${post.comments}</div>
+                `;
+                postDiv.onclick = () => openPost(post.id);
+                gridContainer.appendChild(postDiv);
+            });
+        }
+
+        function initFeed() {
+            postsData.forEach(post => {
+                const postCard = document.createElement('div');
+                postCard.className = 'feed-post';
+                postCard.id = `post-view-${post.id}`;
+                postCard.innerHTML = `
+                    <div class="feed-post-header">
+                        <img src="post 2e.webp" alt="pfp">
+                        <span>Aruna.otherworld</span>
+                    </div>
+                    <img src="${post.img}" class="feed-post-img" alt="Post">
+                    <div class="feed-post-content">
+                        <div class="feed-actions">
+                            <span>❤️</span> <span>💬</span> <span>✈️</span>
+                        </div>
+                        <span class="feed-likes">${post.likes} Suka</span>
+                        <div class="feed-caption">
+                            <strong>Aruna.otherworld</strong> ${post.caption}
+                        </div>
+                        <span class="feed-date">${post.date}</span>
+                    </div>
+                `;
+                viewerFeed.appendChild(postCard);
+            });
+        }
+
+        function openPost(id) {
+            postViewer.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            const targetPost = document.getElementById(`post-view-${id}`);
+            if (targetPost) {
+                targetPost.scrollIntoView();
+            }
+        }
+
+        closeViewerBtn.onclick = () => {
+            postViewer.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initGrid();
+            initFeed();
             setTimeout(() => {
-                // 1. Reveal content container in layout
-                content.style.display = 'block';
-                
-                // 2. Trigger fade out of loader
+                document.getElementById('app-content').style.display = 'block';
+                const loader = document.getElementById('loader-wrapper');
                 loader.style.opacity = '0';
                 loader.style.visibility = 'hidden';
-
-                // 3. Trigger fade in of content (slight delay for smoother visuals)
                 setTimeout(() => {
-                    content.style.opacity = '1';
+                    document.getElementById('app-content').style.opacity = '1';
                 }, 50);
-
-                // 4. Cleanup DOM after transition finishes
-                setTimeout(() => {
-                    loader.remove();
-                }, 500);
-            }, FAKE_LOADING_DURATION);
+            }, 1500);
         });
     </script>
 </body>
 </html>
-
